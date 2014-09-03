@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
+class Task(models.Model):
+	start_url = models.URLField(max_length=200)
+	end_url = models.URLField(max_length=200)
