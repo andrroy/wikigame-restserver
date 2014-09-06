@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-### Test
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+
+from sites.models import Task
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,7 +21,18 @@ class UserViewSet(viewsets.ModelViewSet):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-### End
+
+
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
+	class Meta:
+		model = Task
+		fields = ('start_url', 'end_url')
+
+class TaskViewSet(viewsets.ModelViewSet):
+	queryset = Task.objects.all().filter(start_url = "http://no.m.wikipedia.org/wiki/Dahls_Pils") #### FIX!!!
+	serializer_class = TaskSerializer
+
+router.register(r'tasks', TaskViewSet)
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),
